@@ -1,106 +1,70 @@
-\# Financial Analytics
-
-
+# Financial Analytics
 
 A data pipeline that extracts financial market data and loads it into BigQuery for analysis.
 
-
-
-\## Overview
-
-
+## Overview
 
 This project:
+1. Extracts stock prices from Alpha Vantage API
+2. Extracts economic indicators from FRED API
+3. Loads the data into Google BigQuery
+4. Analyzes trends using SQL
 
-1\. Extracts stock prices from Yahoo Finance
+## Data Sources
 
-2\. Extracts economic indicators from FRED
+**Stock Prices (Alpha Vantage)**
+- Daily OHLCV data (Open, High, Low, Close, Volume)
+- Tickers: AAPL, MSFT, GOOGL, AMZN, META
 
-3\. Loads the data into Google BigQuery
+**Economic Indicators (FRED)**
+- Unemployment Rate (UNRATE)
+- Inflation / CPI (CPIAUCSL)
+- Federal Funds Rate (FEDFUNDS)
 
-4\. Analyzes trends using SQL
+## Setup
 
+1. Clone the repository
+2. Create a virtual environment: `python -m venv venv`
+3. Activate it: `venv\Scripts\activate` (Windows) or `source venv/bin/activate` (Mac/Linux)
+4. Install dependencies: `pip install -r requirements.txt`
+5. Copy `.env.example` to `.env` and add your API keys
 
+## API Keys Required
 
-\## Setup
+- **Alpha Vantage**: Free at https://www.alphavantage.co/support/#api-key
+- **FRED**: Free at https://fred.stlouisfed.org/docs/api/api_key.html
+- **Google Cloud**: Create a project at https://console.cloud.google.com
 
-
-
-1\. Clone the repository
-
-2\. Create a virtual environment: `python -m venv venv`
-
-3\. Activate it: `venv\\Scripts\\activate` (Windows) or `source venv/bin/activate` (Mac/Linux)
-
-4\. Install dependencies: `pip install -r requirements.txt`
-
-5\. Copy `.env.example` to `.env` and fill in your credentials
-
-6\. Set up Google Cloud authentication (see below)
-
-
-
-\## Google Cloud Setup
-
-
-
-1\. Create a Google Cloud project
-
-2\. Enable the BigQuery API
-
-3\. Create a service account and download the JSON key
-
-4\. Set the path in your `.env` file
-
-
-
-\## Usage
-
-
+## Usage
 
 Extract data:
-
 ```bash
-
-python -m financial\_analytics.extract
-
+python -m financial_analytics.extract
 ```
-
-
 
 Load to BigQuery:
-
 ```bash
-
-python -m financial\_analytics.load
-
+python -m financial_analytics.load
 ```
 
-
-
-\## Project Structure
-
+## Project Structure
 ```
-
 financial-analytics/
-
-├── financial\_analytics/   # Python package
-
-│   ├── extract.py         # Data extraction scripts
-
-│   └── load.py            # BigQuery loading scripts
-
+├── financial_analytics/   # Python package
+│   ├── __init__.py
+│   ├── extract.py         # Data extraction from APIs
+│   └── load.py            # Load data to BigQuery
 ├── sql/                   # SQL analysis queries
-
-├── data/                  # Local data files
-
+├── data/                  # Local parquet files
 ├── tests/                 # Unit tests
-
 ├── .env.example           # Environment template
-
-├── requirements.txt       # Dependencies
-
+├── .gitignore
+├── requirements.txt
 └── README.md
-
 ```
 
+## Output Files
+
+After running extraction:
+- `data/stocks.parquet` — Stock price data
+- `data/economic.parquet` — Economic indicator data
