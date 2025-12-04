@@ -1,0 +1,17 @@
+# Virtual environment
+venv/
+
+# Data files
+data/*.parquet
+data/*.csv
+
+# Environment variables (secrets)
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+
+# IDE
+.vscode/
+.idea/
