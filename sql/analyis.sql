@@ -63,3 +63,30 @@ SELECT
 FROM financial_data.economic_indicators
 WHERE date = (SELECT MAX(date) FROM financial_data.economic_indicators WHERE indicator = economic_indicators.indicator)
 ORDER BY indicator;
+
+-- 6. Stock performance vs Fed interest rate
+-- Compare monthly average stock prices with the federal funds rate
+WITH monthly_stocks AS (
+    SELECT 
+        ticker,
+        DATE_TRUNC(date, MONTH) as month,
+        ROUND(AVG(close), 2) as avg_close
+    FROM financial_data.stock_prices
+    GROUP BY ticker, DATE_TRUNC(date, MONTH)
+),
+monthly_fed_rate AS (
+    SELECT 
+        DATE_TRUNC(date, MONTH) as month,
+        ROUND(AVG(value), 2) as fed_rate
+    FROM financial_data.economic_indicators
+    WHERE indicator = 'fred_rate'
+    GROUP BY DATE_TRUNC(date, MONTH)
+)
+SELECT 
+    s.month,
+    s.ticker,
+    s.avg_close,
+    f.fed_rate
+FROM monthly_stocks s
+LEFT JOIN monthly_fed_rate f ON s.month = f.month
+ORDER BY s.month, s.ticker;
