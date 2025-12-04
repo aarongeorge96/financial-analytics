@@ -7,6 +7,7 @@ data/*.csv
 
 # Environment variables (secrets)
 .env
+service-account.json
 
 # Python cache
 __pycache__/
